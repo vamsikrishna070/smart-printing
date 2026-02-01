@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, buildUrl } from "@shared/routes";
 import { useToast } from "@/hooks/use-toast.js";
+import { getApiUrl } from "@/lib/api";
 
 export function useJobs() {
   const { toast } = useToast();
@@ -9,7 +10,7 @@ export function useJobs() {
   const { data: jobs, isLoading } = useQuery({
     queryKey: [api.jobs.list.path],
     queryFn: async () => {
-      const res = await fetch(api.jobs.list.path, { credentials: "include" });
+      const res = await fetch(getApiUrl(api.jobs.list.path), { credentials: "include" });
       if (!res.ok) throw new Error("Failed to fetch jobs");
       return api.jobs.list.responses[200].parse(await res.json());
     },
@@ -19,7 +20,7 @@ export function useJobs() {
   const createJobMutation = useMutation({
     mutationFn: async (formData) => {
       // NOTE: We don't use JSON.stringify for FormData, fetch handles it automatically
-      const res = await fetch(api.jobs.create.path, {
+      const res = await fetch(getApiUrl(api.jobs.create.path), {
         method: api.jobs.create.method,
         body: formData,
         credentials: "include",
@@ -52,7 +53,7 @@ export function useJobs() {
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status }) => {
-      const url = buildUrl(api.jobs.updateStatus.path, { id });
+      const url = getApiUrl(buildUrl(api.jobs.updateStatus.path, { id }));
       const res = await fetch(url, {
         method: api.jobs.updateStatus.method,
         headers: { "Content-Type": "application/json" },
