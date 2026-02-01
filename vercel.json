@@ -1,0 +1,10 @@
+# Vercel deployment configuration
+# Deploy frontend only to Vercel
+
+# Build settings
+[build]
+  command = "cd frontend && npm install && npm run build"
+  publish = "frontend/dist"
+
+# Environment variables needed (set in Vercel dashboard):
+# VITE_API_URL - Your backend API URL

@@ -1,0 +1,34 @@
+{
+  "name": "super-good-ui-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "dev": "node server/index.js",
+    "start": "node server/index.js",
+    "seed": "node server/seed.js"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.0.1",
+    "express-session": "^1.18.1",
+    "memorystore": "^1.6.7",
+    "mongodb": "^7.0.0",
+    "mongoose": "^9.1.5",
+    "multer": "^2.0.2",
+    "nanoid": "^5.0.9",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "ws": "^8.18.0",
+    "zod": "^3.24.2",
+    "zod-validation-error": "^3.4.0"
+  },
+  "devDependencies": {
+    "@replit/vite-plugin-cartographer": "^0.4.4",
+    "@replit/vite-plugin-dev-banner": "^0.1.1",
+    "@replit/vite-plugin-runtime-error-modal": "^0.0.3",
+    "@vitejs/plugin-react": "^4.7.0",
+    "esbuild": "^0.25.0",
+    "vite": "^7.3.0"
+  }
+}
