@@ -1,103 +1,74 @@
-# SmartPrint - Print Management System
+# SmartPrint
 
-A modern print queue management system built with React, Express, and MongoDB.
+A web-based print queue management system for college stationery shops. Students can submit print jobs online, and staff can manage the queue efficiently.
 
-## Features
+## What it does
 
-- 🖨️ **Smart Queue Management** - Real-time print job tracking and status updates
-- 👥 **Role-Based Access** - Separate interfaces for students and staff
-- 📄 **Document Upload** - Support for PDF, DOCX, and image files
-- 📊 **Dashboard Analytics** - Track pending, printing, and completed jobs
-- 🔐 **Secure Authentication** - Session-based auth with encrypted passwords
-- 📱 **Responsive Design** - Works seamlessly on desktop and mobile
-- ⚡ **Real-time Updates** - Live queue status with TanStack Query
-- 🎨 **Modern UI** - Beautiful interface with Tailwind CSS and Framer Motion
+Students upload documents and join a print queue. They can see their position and estimated wait time. Staff members manage the queue by updating job statuses (pending, printing, ready for pickup, completed). The system updates in near real-time so students know when to collect their prints.
 
-## Tech Stack
+Built with React for the frontend and Express + MongoDB for the backend.
 
-### Frontend
+## Technologies Used
 
-- **React 18** - UI library
-- **Vite** - Build tool and dev server
-- **Wouter** - Lightweight routing
-- **TanStack Query** - Server state management
-- **Tailwind CSS** - Utility-first styling
-- **Framer Motion** - Animations
-- **Radix UI** - Accessible components
-- **React Hook Form + Zod** - Form validation
+**Frontend:**  
+React, Vite, Tailwind CSS, TanStack Query, Wouter (routing), Framer Motion
 
-### Backend
+**Backend:**  
+Express, MongoDB with Mongoose, Passport.js
 
-- **Express 5** - Web framework
-- **MongoDB + Mongoose** - Database
-- **Passport.js** - Authentication
-- **Express Session** - Session management
-- **Multer** - File uploads
-- **Zod** - Schema validation
+**Other:**  
+Multer (file uploads), Zod (validation)
 
-## Installation
+## Prompt Template & Prompts Used
 
-### Prerequisites
+This project was built with the help of AI as a development support tool. AI was mainly used to understand architecture, backend logic, and deployment steps. All generated outputs were reviewed and modified before integration.
 
-- Node.js v18 or higher
-- MongoDB Atlas account (or local MongoDB)
+**Prompt Template**
 
-### Setup
+"Help me build a full-stack web application using React for the frontend and Express with MongoDB for the backend. Explain things step by step and follow good practices for authentication, database design, and deployment."
 
-1. **Clone the repository**
+**Prompts Used During Development**
 
-   ```bash
-   git clone <your-repo-url>
-   cd Super-Good-UI
-   ```
+- "Help me design a college print management system where students upload files for printing and staff manage a print queue."
+- "How do I implement login and signup using Passport.js with student and staff roles?"
+- "Design MongoDB schemas for users and print jobs with file details, print options, status, and timestamps."
+- "How can I upload PDF, DOCX, and image files using Multer in an Express app?"
+- "Create a print job queue where staff update job status and students track progress."
+- "Use TanStack Query to fetch and update print job data in React."
+- "How do I deploy a React app on Vercel and an Express backend on Render with MongoDB Atlas?"
 
-2. **Install dependencies**
+## Setup
+
+You'll need Node.js (v18+) and a MongoDB database.
+
+1. Clone the repository and install dependencies:
 
    ```bash
    npm install
    ```
 
-3. **Configure environment variables**
-
-   Create `backend/.env` file:
+2. Create `backend/.env`:
 
    ```env
    DATABASE_URL=mongodb+srv://your-connection-string
-   SESSION_SECRET=your-secret-key
+   SESSION_SECRET=some-random-string
    PORT=5000
-   NODE_ENV=development
    ```
 
-4. **Seed staff account** (optional)
+3. Create a staff account (run once):
 
    ```bash
    cd backend
-   node server/seed.js
+   npm run seed
    ```
 
-   Default staff credentials:
-   - Username: `staff`
-   - Password: `staff123`
+   The script will prompt for a username and password.
 
-5. **Start development servers**
-
-   Terminal 1 (Backend):
-
+4. Start development servers:
    ```bash
-   cd backend
    npm run dev
    ```
-
-   Terminal 2 (Frontend):
-
-   ```bash
-   cd frontend
-   npm run dev
-   ```
-
-6. **Open the application**
-
-   Navigate to `http://localhost:5173`
+   Open http://localhost:5173
 
 ## Project Structure
 
@@ -105,37 +76,24 @@ A modern print queue management system built with React, Express, and MongoDB.
 Super-Good-UI/
 ├── backend/
 │   ├── server/
-│   │   ├── auth.js          # Authentication logic
-│   │   ├── db.js            # Database connection
-│   │   ├── index.js         # Express server
-│   │   ├── models.js        # Mongoose schemas
-│   │   ├── routes.js        # API routes
-│   │   ├── seed.js          # Database seeding
-│   │   ├── static.js        # Static file serving
-│   │   ├── storage.js       # Storage interface
-│   │   └── vite.js          # Vite middleware
-│   ├── uploads/             # Uploaded files
-│   ├── package.json
-│   └── .env                 # Environment variables
+│   │   ├── index.js        # Express server
+│   │   ├── auth.js         # Authentication
+│   │   ├── routes.js       # API routes
+│   │   ├── models.js       # MongoDB schemas
+│   │   ├── seed.js         # Staff account setup
+│   │   └── ...
+│   ├── uploads/            # Uploaded files
+│   └── .env
 ├── frontend/
 │   ├── src/
-│   │   ├── components/      # React components
-│   │   │   ├── layout.jsx
-│   │   │   └── ui/          # UI components
-│   │   ├── hooks/           # Custom hooks
-│   │   ├── lib/             # Utilities
-│   │   ├── pages/           # Page components
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   ├── public/
-│   │   └── favicon.svg      # App icon
-│   ├── index.html
-│   ├── package.json
+│   │   ├── pages/          # Dashboards
+│   │   ├── components/     # UI components
+│   │   ├── hooks/          # Custom hooks
+│   │   └── ...
 │   └── vite.config.js
 └── shared/
-    ├── routes.js            # API route definitions
-    └── schema.js            # Zod schemas
-
+    ├── routes.js           # Shared route definitions
+    └── schema.js           # Zod schemas
 ```
 
 ## Usage
@@ -153,61 +111,45 @@ Super-Good-UI/
 
 - View all pending print jobs
 - Start printing jobs
-- Mark jobs as ready for pickup
-- Complete jobs
-- Download uploaded files
-- View student contact information
-- Search jobs by file name or student
+  **Student Features**
 
-## Deployment
+- Register and login
+- Upload documents for printing
+- Choose copies and print type (B&W / Color)
+- Track job status
+- View estimated wait time
+- Update profile information
+  Frontend is deployed on Vercel, backend on Render.
 
-### Frontend (Vercel/Netlify)
+**Frontend (Vercel)**
 
-1. Build the frontend:
-   ```bash
-   cd frontend
-   npm run build
-   ```
-2. Deploy the `dist` folder
+- Root directory
+- Environment variable:
+  ```
+  VITE_API_URL=https://your-backend.onrender.com
+  ```
 
-### Backend (Railway/Render/Heroku)
+**Backend (Render)**
 
-1. Set environment variables in your hosting platform
-2. Deploy the backend directory
-3. Update frontend API proxy configuration
+- Root directory: `backend`
+- Build command: `npm install`
+- Start command: `npm start`
+- Environment variables:
+  ```
+  DATABASE_URL=your-mongodb-connection-string
+  SESSION_SECRET=random-secure-string
+  NODE_ENV=production
+  FRONTEND_URL=https://your-vercel-app.vercel.app
+  ```
 
-### Environment Variables for Production
+After deployment, run the seed script against the production database to create a staff account.Notes
 
-- `DATABASE_URL` - MongoDB connection string
-- `SESSION_SECRET` - Strong random string
-- `NODE_ENV=production`
-- `PORT` - Server port (often set by host)
-
-## API Endpoints
-
-### Authentication
-
-- `POST /api/register` - Register new user
-- `POST /api/login` - Login user
-- `POST /api/logout` - Logout user
-- `GET /api/user` - Get current user
-
-### Print Jobs
-
-- `GET /api/jobs` - Get all jobs (filtered by role)
-- `POST /api/jobs` - Create new print job
-- `PATCH /api/jobs/:id` - Update job status
-- `GET /uploads/:filename` - Download uploaded file
-
-### User Profile
-
-- `PATCH /api/user/profile` - Update profile
-- `PATCH /api/user/password` - Change password
-
-## License
-
-MIT
-
-## Support
-
-For issues and questions, please create an issue in the repository.
+- Students can only see their own jobs, staff see everything
+- Job data is stored in MongoDB, uploaded files are saved on the server disk
+- Session cookies handle authentication
+- Real-time updates happen through React Query polling
+  view their own print jobs
+- Staff can view and manage all jobs
+- Uploaded files are stored on the server disk
+- Authentication uses session cookies
+- Real-time updates use
