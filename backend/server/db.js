@@ -10,12 +10,24 @@ const DATABASE_URL = process.env.DATABASE_URL || "mongodb://localhost:27017/prin
 
 console.log("Connecting to database:", DATABASE_URL.replace(/\/\/[^:]+:[^@]+@/, '//***:***@'));
 
-// Connect to MongoDB
-mongoose.connect(DATABASE_URL)
+// Connect to MongoDB with better error handling
+mongoose.connect(DATABASE_URL, {
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+})
 .then(() => console.log("✓ Connected to MongoDB successfully"))
 .catch((err) => {
   console.error("✗ MongoDB connection error:", err.message);
   console.log("⚠ Running with memory storage - data will not persist");
+});
+
+// Additional connection event handlers
+mongoose.connection.on('error', (err) => {
+  console.error("MongoDB connection error:", err);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.log("MongoDB disconnected");
 });
 
 export const db = mongoose.connection;
