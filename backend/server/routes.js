@@ -12,8 +12,17 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
+// Configure multer to preserve file extensions
 const upload = multer({ 
-  dest: uploadDir,
+  storage: multer.diskStorage({
+    destination: uploadDir,
+    filename: (req, file, cb) => {
+      // Generate unique filename while preserving extension
+      const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      const ext = path.extname(file.originalname);
+      cb(null, uniqueName + ext);
+    }
+  }),
   limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
 });
 
@@ -21,8 +30,34 @@ export async function registerRoutes(httpServer, app) {
   // Set up authentication
   setupAuth(app);
 
-  // Serve uploaded files statically for staff to view
-  app.use('/uploads', express.static(uploadDir));
+  // Download route with proper headers
+  app.get('/uploads/:filename', async (req, res) => {
+    try {
+      const filename = req.params.filename;
+      const filePath = path.join(uploadDir, filename);
+      
+      // Security check: prevent directory traversal
+      if (!filePath.startsWith(uploadDir)) {
+        return res.sendStatus(403);
+      }
+      
+      if (!fs.existsSync(filePath)) {
+        return res.sendStatus(404);
+      }
+      
+      // Get the job to retrieve original filename
+      const job = await storage.getPrintJobByFilePath(filename);
+      const originalName = job?.fileName || filename;
+      
+      // Set proper headers for download
+      res.setHeader('Content-Disposition', `attachment; filename="${originalName}"`);
+      res.setHeader('Content-Type', 'application/octet-stream');
+      res.sendFile(filePath);
+    } catch (err) {
+      console.error("File download error:", err);
+      res.sendStatus(500);
+    }
+  });
 
   // --- Auth Routes ---
   // (Handled by setupAuth mostly, but we can add specific handlers if needed beyond passport)

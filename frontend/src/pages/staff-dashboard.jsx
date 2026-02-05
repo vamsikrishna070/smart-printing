@@ -27,6 +27,7 @@ import { Input } from "@/components/ui/input.jsx";
 import { useState } from "react";
 import { format } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
+import { getApiUrl } from "@/lib/api.js";
 
 export default function StaffDashboard() {
   const { jobs, isLoading, updateStatusMutation } = useJobs();
@@ -187,7 +188,7 @@ export default function StaffDashboard() {
                             size="sm" 
                             variant="outline"
                             className="text-primary border-primary/20 hover:bg-primary/5"
-                            onClick={() => window.open(`/uploads/${job.filePath}`, '_blank')}
+                            onClick={() => window.open(getApiUrl(`/uploads/${job.filePath}`), '_blank')}
                           >
                             <Download className="w-4 h-4" />
                           </Button>

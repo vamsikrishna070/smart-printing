@@ -81,6 +81,10 @@ class MemoryStorage {
     return this.printJobs.find(job => job._id === id) || null;
   }
 
+  async getPrintJobByFilePath(filePath) {
+    return this.printJobs.find(job => job.filePath === filePath) || null;
+  }
+
   async updatePrintJobStatus(id, status) {
     const validStatuses = ["pending", "printing", "ready", "completed"];
     if (!validStatuses.includes(status)) return undefined;
@@ -164,6 +168,10 @@ export class DatabaseStorage {
 
   async getPrintJob(id) {
     return await PrintJob.findById(id).lean();
+  }
+
+  async getPrintJobByFilePath(filePath) {
+    return await PrintJob.findOne({ filePath }).lean();
   }
 
   async updatePrintJobStatus(id, status) {
